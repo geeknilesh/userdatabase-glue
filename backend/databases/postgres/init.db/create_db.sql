@@ -1,0 +1,3 @@
+
+CREATE DATABASE IF NOT EXISTS `my_first_db`;
+GRANT ALL PRIVILEGES ON DATABASE `my_first_db` TO `postgres`;

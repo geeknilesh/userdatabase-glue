@@ -1,0 +1,67 @@
+table:
+  name: users
+  schema: public
+insert_permissions:
+  - role: listener
+    permission:
+      check: {}
+      columns:
+        - id
+        - email
+        - name
+        - password
+        - created_at
+        - updated_at
+  - role: user
+    permission:
+      check:
+        id: X-HASURA-USER-ID
+      set:
+        id: X-HASURA-USER-ID
+      columns: '*'
+select_permissions:
+  - role: listener
+    permission:
+      columns:
+        - id
+        - email
+        - name
+        - password
+        - created_at
+        - updated_at
+      filter: {}
+  - role: user
+    permission:
+      columns: '*'
+      filter:
+        id: X-HASURA-USER-ID
+      limit: 10
+      allow_aggregations: true
+update_permissions:
+  - role: listener
+    permission:
+      columns:
+        - id
+        - email
+        - name
+        - password
+        - created_at
+        - updated_at
+      filter: {}
+      check: {}
+  - role: user
+    permission:
+      columns: '*'
+      filter:
+        id: X-HASURA-USER-ID
+      check: null
+      set:
+        updated_at: NOW()
+delete_permissions:
+  - role: listener
+    permission:
+      filter: {}
+  - role: user
+    permission:
+      filter:
+        id: X-HASURA-USER-ID

@@ -1,0 +1,80 @@
+version: "3.9"
+services:
+  auth:
+    container_name: auth
+    restart: always
+    build: /Users/harshithkumar/rbac-gluestack/backend/services/auth
+    volumes:
+      - /Users/harshithkumar/rbac-gluestack/backend/services/auth:/server
+      - /server/node_modules
+    env_file:
+      - /Users/harshithkumar/rbac-gluestack/backend/services/auth/.env
+  engine:
+    container_name: engine
+    restart: always
+    build: /Users/harshithkumar/rbac-gluestack/backend/engine
+    volumes:
+      - /Users/harshithkumar/rbac-gluestack/backend/engine:/server
+      - /server/node_modules
+    env_file:
+      - /Users/harshithkumar/rbac-gluestack/backend/engine/.env
+  nginx:
+    container_name: nginx
+    restart: always
+    build: /Users/harshithkumar/rbac-gluestack/backend/engine/router
+    ports:
+      - 9090:80
+    volumes:
+      - /Users/harshithkumar/rbac-gluestack/backend/engine/router/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      graphql:
+        condition: service_healthy
+  graphql:
+    container_name: graphql
+    restart: always
+    image: hasura/graphql-engine:v2.16.1
+    ports:
+      - 8080:8080
+    volumes:
+      - /Users/harshithkumar/rbac-gluestack/backend/services/graphql:/hasura
+    env_file:
+      - /Users/harshithkumar/rbac-gluestack/backend/services/graphql/.env
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 20
+    depends_on:
+      postgres:
+        condition: service_healthy
+  user:
+    container_name: user
+    restart: always
+    build: /Users/harshithkumar/rbac-gluestack/backend/services/user
+    volumes:
+      - /Users/harshithkumar/rbac-gluestack/backend/services/user:/server
+      - /server/node_modules
+    env_file:
+      - /Users/harshithkumar/rbac-gluestack/backend/services/user/.env
+  postgres:
+    container_name: postgres
+    restart: always
+    image: postgres:12
+    ports:
+      - 5432:5432
+    volumes:
+      - /Users/harshithkumar/rbac-gluestack/backend/databases/postgres/db:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespass
+      POSTGRES_DB: my_first_db
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - psql -U postgres -d my_first_db
+      interval: 10s
+      timeout: 10s
+      retries: 50
+      start_period: 30s

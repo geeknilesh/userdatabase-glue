@@ -1,0 +1,30 @@
+{
+  "name": "rbac-gluestack",
+  "version": "0.0.1",
+  "description": "Create an Application using GlueStack framework",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gluestack/create-gluestack-app"
+  },
+  "keywords": [
+    "npm",
+    "create-gluestack-app"
+  ],
+  "engines": {
+    "node": ">=18 <19"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@gluestack/framework": "^0.0.x",
+    "@gluestack/glue-plugin-auth": "^0.0.31",
+    "@gluestack/glue-plugin-backend-engine": "^0.0.29",
+    "@gluestack/glue-plugin-engine": "^0.0.x",
+    "@gluestack/glue-plugin-graphql": "^0.0.36",
+    "@gluestack/glue-plugin-postgres": "^0.0.19",
+    "@gluestack/glue-plugin-service-node": "^0.0.14",
+    "jsonwebtoken": "^9.0.0"
+  },
+  "peerDependencies": {
+    "@gluestack/framework": "^0.0.x"
+  }
+}

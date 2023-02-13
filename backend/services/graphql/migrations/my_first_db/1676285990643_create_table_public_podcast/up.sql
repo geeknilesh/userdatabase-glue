@@ -1,0 +1,1 @@
+CREATE TABLE "public"."podcast" ("id" serial NOT NULL, "podcast_id" uuid NOT NULL, "podcast_name" text NOT NULL, "channel_id" text NOT NULL, PRIMARY KEY ("id") , UNIQUE ("channel_id"), UNIQUE ("podcast_id"));

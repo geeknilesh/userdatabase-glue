@@ -1,0 +1,50 @@
+table:
+  name: user_role
+  schema: public
+object_relationships:
+  - name: users
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - id
+        - user_id
+        - role
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - user_id
+        - role
+      filter: {}
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - user_id
+        - role
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check:
+        id:
+          _eq: X-Hasura-User-Id
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
